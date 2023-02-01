@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<html lang="en">
+<head>
+	<title>Red neuronal</title>
+	<style type="text/css">
+		#sitio {
+			padding: 5rem;
+			font-size: 5rem;
+			margin-left: 15rem;
+		}
+	</style>
+</head>
+<body>
+	<input class="jscolor {onFineChange: 'update(this)'}" value="cc66ff">
+	<div id="sitio">
+		Mi sitio web
+	</div>
+	<script src="jscolor.js"></script>
+	<script type="text/javascript">
+		function update(color){
+			console.log(color.rgb);
+		}	  
+
+	</script>
+
+	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jscolor/2.4.5/jscolor.min.js"></script>
+	<script src="https://unpkg.com/brain.js"></script>
+
+<script type="text/javascript">
+    var net = new brain.NeuralNetwork();
+   
+    net.train([
+      {
+        input: {
+          r: 0,
+          g: 0,
+          b: 0,
+        },
+        output: {
+          color: 1,
+        },
+      },
+      {
+        input: {
+          r: 1,
+          g: 1,
+          b: 1,
+        },
+        output: {
+          color: 0,
+        },
+      },
+      
+    ]);
+
+    function update(picker) {
+       let colorRGB = picker.toRGBString();
+      document.getElementById("screen").style.background = picker.toRGBString();
+      colorRGB = colorRGB.replace("rgb(", "");
+      colorRGB = colorRGB.replace(")", "");
+      colorRGB = colorRGB.split(",");
+      let input = {
+        r: colorRGB[0] / 255,
+        b: colorRGB[1] / 255,
+        b: colorRGB[2] / 255,
+      };
+      const result = net.run(input);
+      const textColor = result.color > 0.5 ? "white" : "black";
+      console.log(textColor,result)
+      document.getElementById("screen").style.color = textColor;
+    }
+</script>
+
+</body>
+</html>
